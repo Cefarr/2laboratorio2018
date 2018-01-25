@@ -48,6 +48,42 @@ public class CalculatorTest {
         qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
                    ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
             .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
+        
     }
+    
+    @Test
+    public void testClaseEquivalenciaDos() {
+        CalculadoraTarifas ct=new CalculadoraTarifas();
 
+        qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
+                   ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
+        
+    }
+    @Test
+    public void testClaseEquivalenciaTres() {
+        CalculadoraTarifas ct=new CalculadoraTarifas();
+
+        qt().forAll(range(18,65).describedAs(e -> "Edad = " + e)
+                   ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));      
+    }
+      @Test
+    public void testClaseEquivalenciaCuatro() {
+        CalculadoraTarifas ct=new CalculadoraTarifas();
+
+        qt().forAll(range(65,125).describedAs(e -> "Edad = " + e)
+                   ,range(21,60).describedAs(d -> "DiasAntelacion = " + d))
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
+        
+    }
+      @Test
+    public void testClaseEquivalenciaCinco() {
+        CalculadoraTarifas ct=new CalculadoraTarifas();
+
+        qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
+                   ,range(21,60).describedAs(d -> "DiasAntelacion = " + d))
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
+        
+    }
 }
