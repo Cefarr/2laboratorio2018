@@ -31,6 +31,11 @@ import static org.quicktheories.generators.SourceDSL.*;
 
 public class CalculatorTest {
 
+    /**
+     * Problemas identificados a la hora de ejecutar las pruebas
+     * Se registraron errores tipo org.quicktheories.core.ExceptionReporter.falsify y no se pudo cargar ni calcular las tarifas con calculador 
+     * de tarifas. La solucion de la incompatibilidad de esa clase debe resolver el problema.
+     */
     private DateTime now;
     private float tarifa;
 
@@ -39,7 +44,12 @@ public class CalculatorTest {
         now = new DateTime();
         tarifa = 1000f;
     }
-
+    /**
+     * Especificacion de la clase de equivalencia Uno
+     * Edad: Edad menor a 18.
+     * Dias: Dias menor a 20
+     * Descuento: Solo hay un 5% de descuento.
+     */
 
     @Test
     public void testClaseEquivalenciaUno() {
@@ -47,27 +57,48 @@ public class CalculatorTest {
 
         qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
                    ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
-            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
-        
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));        
     }
     
+    /**
+     * Especificacion clase Dos
+     * Edad mayor a 18 y menor e igual que 65 años.
+     * Dias de antelacion menor de 20.
+     * Descuento 0%.
+     */
     @Test
     public void testClaseEquivalenciaDos() {
         CalculadoraTarifas ct=new CalculadoraTarifas();
 
-        qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
+        qt().forAll(range(18,65).describedAs(e -> "Edad = " + e)
                    ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
             .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
         
     }
+    
+        
+    /**
+     * Especificacion clase Tres
+     * Edad: mayor a 65 años .
+     * Dias: menor a 20 dias.
+     * Descuento: 8%.
+     */
+    
     @Test
     public void testClaseEquivalenciaTres() {
         CalculadoraTarifas ct=new CalculadoraTarifas();
 
-        qt().forAll(range(18,65).describedAs(e -> "Edad = " + e)
+        qt().forAll(range(66,120).describedAs(e -> "Edad = " + e)
                    ,range(0,20).describedAs(d -> "DiasAntelacion = " + d))
             .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));      
     }
+    /**
+     * Especificacion clase cuarta
+     * Edad: Mayor a 65 años.
+     * Dias: Mayor a 20 dias.
+     * Descuento: 8% O 15% O 23%
+     */
+    
       @Test
     public void testClaseEquivalenciaCuatro() {
         CalculadoraTarifas ct=new CalculadoraTarifas();
@@ -77,13 +108,40 @@ public class CalculatorTest {
             .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
         
     }
+    
+    /**
+     * Especificacion Clase Quinta
+     * Edad : Mayor a 18 y menor o igual a 65 años.
+     * Dias: Mayor a 20 dias.
+     * Descuento:15%.
+     */
+    
       @Test
     public void testClaseEquivalenciaCinco() {
         CalculadoraTarifas ct=new CalculadoraTarifas();
 
-        qt().forAll(range(0,17).describedAs(e -> "Edad = " + e)
+        qt().forAll(range(18,65).describedAs(e -> "Edad = " + e)
                    ,range(21,60).describedAs(d -> "DiasAntelacion = " + d))
             .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
         
     }
+    
+    
+     /**
+     * Especificacion Clase Sexta
+     * Edad : Mayor a 18 años.
+     * Dias: Mayor a 20 dias.
+     * Descuento:15%.
+     */
+    
+          @Test
+    public void testClaseEquivalenciaSeis() {
+        CalculadoraTarifas ct=new CalculadoraTarifas();
+
+        qt().forAll(range(18,100).describedAs(e -> "Edad = " + e)
+                   ,range(21,60).describedAs(d -> "DiasAntelacion = " + d))
+            .check((edad,days) -> ct.calculoTarifa(tarifa,now, now.minus(days),edad) == tarifa * (1 - 0.05));
+        
+    }
+    
 }
